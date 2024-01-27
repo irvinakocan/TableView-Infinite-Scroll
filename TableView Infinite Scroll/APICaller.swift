@@ -9,7 +9,7 @@ import Foundation
 
 class APICaller {
     
-    public static var isPaginating = false
+    static var isPaginating = false
     
     // mocking the data
     

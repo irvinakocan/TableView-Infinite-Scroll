@@ -53,13 +53,11 @@ class ViewController: UIViewController {
         let footerView = UIView(frame: CGRect(x: 0,
                                               y: 0,
                                               width: view.frame.size.width,
-                                              height: 60))
-        
+                                              height: 50))
         let spinner = UIActivityIndicatorView()
-        spinner.startAnimating()
         footerView.addSubview(spinner)
         spinner.center = footerView.center
-        
+        spinner.startAnimating()
         return footerView
     }
 }
@@ -83,7 +81,7 @@ extension ViewController: UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let position = scrollView.contentOffset.y
-        if position > (tableView.contentSize.height - 20 - scrollView.frame.size.height) {
+        if position > (tableView.contentSize.height - scrollView.frame.size.height + 40) {
             
             // fetch more data
             
@@ -95,14 +93,12 @@ extension ViewController: UIScrollViewDelegate {
             tableView.tableFooterView = createSpinnerFooter()
             
             APICaller.fetchData(pagination: true, completion: {[weak self] result in
-                DispatchQueue.main.async {
-                    self?.tableView.tableFooterView = nil
-                }
                 switch result {
                 case .success(let moreData):
                     self?.data.append(contentsOf: moreData)
                     DispatchQueue.main.async {
                         self?.tableView.reloadData()
+                        self?.tableView.tableFooterView = nil
                     }
                 case .failure(_):
                     break
